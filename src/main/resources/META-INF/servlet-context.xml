@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xsi:schemaLocation="          
+      http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd          
+      http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd          
+      http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd          
+      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd          
+      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+      http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+      http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket.xsd"
+	default-autowire="byName">
+	<context:component-scan base-package="spf.websocket.rest" />
+	<!-- @Autowired等注解驱动 -->
+	<context:annotation-config />
+		
+	<!-- 驱动springRest风格  Controller接口服务 -->     
+    <mvc:annotation-driven>
+	    <mvc:message-converters register-defaults="true">
+	        <!-- 将StringHttpMessageConverter的默认编码设为UTF-8 -->  
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">  
+                <constructor-arg value="UTF-8" />  
+            </bean>  
+            <!-- 将Jackson2HttpMessageConverter的默认格式化输出设为true -->  
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">  
+                <property name="prettyPrint" value="true"/>  
+            </bean>     
+	    </mvc:message-converters>
+	</mvc:annotation-driven>
+
+    <!-- 不拦截静待资源 -->
+    <mvc:default-servlet-handler/>
+	
+
+    
+    <!--系统消息 webSocket配置 -->  
+    <websocket:handlers allowed-origins="*">  
+        <websocket:mapping path="/sysWebSocketServer" handler="websocket"/>  
+        <websocket:handshake-interceptors>  
+        <bean class="spf.websocket.core.SystemHandshakeInterceptor"/>  
+        </websocket:handshake-interceptors>  
+    </websocket:handlers>  
+    <websocket:handlers allowed-origins="*">
+        <websocket:mapping path="/sysWebSocketServer" handler="websocket" />
+        <websocket:handshake-interceptors>
+            <bean class="spf.websocket.core.SystemHandshakeInterceptor" />
+        </websocket:handshake-interceptors>
+        <websocket:sockjs />
+    </websocket:handlers>
+	
+	
+</beans>
+ 

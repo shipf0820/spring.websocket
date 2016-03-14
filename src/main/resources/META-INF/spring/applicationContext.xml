@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"   
+       xmlns:context="http://www.springframework.org/schema/context"  
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop" 
+        xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="  
+        http://www.springframework.org/schema/beans   
+        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd   
+        http://www.springframework.org/schema/context   
+        http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">  
+    
+    <context:component-scan base-package="spf.websocket" />
+    
+    <!-- 业务消息webSocket消息处理器 -->
+    <bean id="websocket" class="spf.websocket.core.SystemWebSocketHandler" /> 
+ 
+    
+    <!--********************datasource******************* -->
+    <bean id="bobcatLogMySQL"
+            class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+            <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+            <property name="url" value="jdbc:MySQL://localhost:3306/lion_log?useUnicode=true&amp;characterEncoding=utf8" />
+            <property name="username" value="root" />
+            <property name="password" value="root" />
+    </bean>
+    <!-- mybatis -->
+    <bean id="bobcatLogSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="bobcatLogMySQL" />
+        <property name="mapperLocations" value="classpath*:/META-INF/**/*Mapper.xml" />
+        <property name="configLocation" value="classpath:/META-INF/mybatis/mybatis.xml" />
+    </bean>
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="spf.websocket.mybitis" />
+        <property name="annotationClass" value="org.springframework.stereotype.Repository" />
+        <property name="sqlSessionFactoryBeanName" value="bobcatLogSqlSessionFactory" />
+    </bean>
+    
+</beans>
