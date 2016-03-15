@@ -30,8 +30,9 @@ public class SystemHandshakeInterceptor extends HttpSessionHandshakeInterceptor{
 			if (session != null) {
 				// 使用userName区分WebSocketHandler，以便定向发送消息
 				String userName = (String) session
-						.getAttribute(Constants.WEBSOCKET_SESSION_NANE);
-				attributes.put(Constants.WEBSOCKET_SESSION_NANE, userName);
+						.getAttribute(Constants.HTTP_SESSION_NANE);
+				attributes.put(Constants.HTTP_SESSION_NANE, userName);
+				attributes.put(Constants.HTTP_SESSION_ID, session.getId());
 			}
 		}
 		return true;
