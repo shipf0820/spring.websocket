@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="spf.websocket.mybitis.UserMapper">
+
+	<resultMap id="BaseResultMap" type="spf.websocket.beans.WebUser" >
+	    <id column="user_id" property="userId" jdbcType="VARCHAR" />
+	    <result column="user_name" property="name" jdbcType="VARCHAR" />
+	    <result column="user_passwd" property="passwd" jdbcType="VARCHAR" />
+    </resultMap>
+	<select id="selectUserInfo" resultMap="BaseResultMap">
+        select user_id,user_name,user_passwd from web_user where user_id = #{userId,jdbcType=VARCHAR}
+    </select>
+	<insert id="insertUser" parameterType="spf.websocket.beans.WebUser"
+       useGeneratedKeys="true" keyProperty="id">
+       INSERT INTO web_user
+       <trim prefix="(" suffix=")" suffixOverrides="," >
+         <if test="userId != null" >
+           user_id,
+         </if>
+         <if test="name != null" >
+           user_name,
+         </if>
+         <if test="passwd != null" >
+           user_passwd,
+         </if>
+       </trim>
+       <trim prefix="values (" suffix=")" suffixOverrides="," >
+             <if test="userId != null" >
+               #{userId,jdbcType=VARCHAR},
+             </if>
+             <if test="name != null" >
+               #{name,jdbcType=VARCHAR},
+             </if>
+             <if test="passwd != null" >
+               #{passwd,jdbcType=VARCHAR},
+             </if>
+       </trim>
+   </insert>
+   <select id="queryUsers" resultType="String">
+   	  select user_name from web_user
+   </select>
+	
+</mapper>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+  
+<configuration scan="true" scanPeriod="5 minutes">
+  <jmxConfigurator />
+  <property name="logstash.path" value="${jboss.home.dir}/standalone/log" />
+  <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+     <File>${logstash.path}/system.log</File>
+	 <append>true</append>
+	 <encoder>
+	   <Pattern>%-26(%d{HH:mm:ss.SSS} [%thread]) %-5level %logger{32} - %msg%n</Pattern>
+	 </encoder>
+  </appender>
+  
+  <root level="INFO">
+    <appender-ref ref="FILE" />
+    <appender-ref ref="STDOUT" />
+  </root>
+</configuration>

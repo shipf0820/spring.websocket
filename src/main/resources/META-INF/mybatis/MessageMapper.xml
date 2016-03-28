@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="spf.websocket.mybitis.MessageMapper">
+
+	<resultMap id="BaseResultMap" type="spf.websocket.beans.Message" >
+	    <id column="id" property="id" jdbcType="BIGINT" />
+	    <result column="senderId" property="senderId" jdbcType="VARCHAR" />
+	    <result column="receiverId" property="receiverId" jdbcType="VARCHAR" />
+	    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+	    <result column="is_read" property="isRead" jdbcType="INTEGER" />
+	    <result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
+	    <result column="receive_time" property="receiveTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    
+    
+    <resultMap id="UserUnReadMessages" type="spf.websocket.beans.SendVo" >
+	    <result column="senderId" property="senderId" jdbcType="VARCHAR" />
+	   	<association column="senderId" property="messageList" resultMap="BaseResultMap" />
+    </resultMap>
+
+	<insert id="insertMessage" parameterType="spf.websocket.beans.Message"
+       useGeneratedKeys="true" keyProperty="id">
+       INSERT INTO user_message
+       <trim prefix="(" suffix=")" suffixOverrides="," >
+         <if test="senderId != null" >
+           senderId,
+         </if>
+         <if test="receiverId != null" >
+           receiverId,
+         </if>
+         <if test="content != null" >
+           content,
+         </if>
+         <if test="isRead != null" >
+           is_read,
+         </if>
+         <if test="sendTime != null" >
+           send_time,
+         </if>
+         <if test="receiveTime != null" >
+           receive_time,
+         </if>
+       </trim>
+       <trim prefix="values (" suffix=")" suffixOverrides="," >
+             <if test="senderId != null" >
+               #{senderId,jdbcType=VARCHAR},
+             </if>
+             <if test="receiverId != null" >
+               #{receiverId,jdbcType=VARCHAR},
+             </if>
+             <if test="content != null" >
+               #{content,jdbcType=LONGVARCHAR},
+             </if>
+             <if test="isRead != null" >
+	           #{isRead,jdbcType=INTEGER},
+	         </if>
+	         <if test="sendTime != null" >
+	           #{sendTime},
+	         </if>
+	         <if test="receiveTime != null" >
+	           #{receiveTime},
+	         </if>
+       </trim>
+    </insert>
+    
+    <select id="selectUnReadMessageByUserId" resultMap="UserUnReadMessages">
+        select id,senderId,content,send_time from user_message where is_read = 0
+        and  receiverId = #{receiverId,jdbcType=VARCHAR}
+    </select>
+    <select id="selectUnReadCountByUserId" resultType="Integer">
+        select count(*) from user_message where is_read = 0 and receiverId = #{receiverId,jdbcType=VARCHAR};
+    </select>
+    
+    <update id="updateMessagesStatus">
+        update user_message
+        <set>
+            <if test="id != null">
+                is_read = 1,
+                receive_time = now(),
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    
+    <update id="updateMessagesStatusByIds">
+        update user_message
+        <set>            
+                is_read = 1,
+                receive_time = now(),
+        </set>
+        where is_read = 0 and id in 
+        <foreach collection="ids" item="id" open="("
+			separator="," close=")">
+			#{id}
+		</foreach> 
+    </update>
+	
+</mapper>
