@@ -41,7 +41,7 @@ public class LoginController {
         if(result.equals("succ")){
             //response.addCookie(new Cookie("JSSESIONID",request.getSession().getId()));
             HttpSession session = request.getSession();
-            session.setAttribute(Constants.WEBSOCKET_SESSION_NANE,name);
+            session.setAttribute(Constants.HTTP_SESSION_NANE,name);
             System.out.println(session.getId());
         }
         return result;

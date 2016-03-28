@@ -1,7 +1,10 @@
 package spf.websocket.beans;
 
-public class WebUser {
+import java.io.Serializable;
+
+public class WebUser implements Serializable{
 	
+	private static final long serialVersionUID = 2410279221815109383L;
 	//
 	private int id;
 	//用户ID

@@ -1,5 +1,6 @@
 package spf.websocket.beans;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
@@ -8,7 +9,9 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import spf.websocket.utils.JackJsonDateTimeFormat;
 import spf.websocket.utils.JackJsonDateTimeParse;
 
-public class Message {
+public class Message implements Serializable{
+	
+	private static final long serialVersionUID = -5483814183205886945L;
 	
 	private Long id;
 	private String senderId;
