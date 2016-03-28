@@ -12,6 +12,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration(locations="classpath*:/META-INF/spring/*.xml")
 public class BaseTest {
 	
+	private void test(){
+		
+	}
+	
 	
 
 }
